@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "mymovablebutton.h"
+
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -19,5 +22,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    myMovableButton *mymovableButton;
 };
 #endif // MAINWINDOW_H
