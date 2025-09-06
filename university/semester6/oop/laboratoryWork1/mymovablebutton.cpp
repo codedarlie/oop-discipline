@@ -16,6 +16,7 @@ void myMovableButton::mousePressEvent(QMouseEvent *event)
         if (fellIntoPlace) {
             setCursor(Qt::ArrowCursor);
             // todo: somefunction(); START
+            emit switchToPage1();
 
         } else {
             dragPosition = event->globalPosition().toPoint() - frameGeometry().topLeft();
@@ -49,14 +50,18 @@ void myMovableButton::mouseReleaseEvent(QMouseEvent *event)
 }
 
 void myMovableButton::checkPosition() {
-    int bX = mapToGlobal(QPoint(0, 0)).x();
-    int bY = mapToGlobal(QPoint(0, 0)).y();
+    // int bX = mapToGlobal(QPoint(0, 0)).x();
+    // int bY = mapToGlobal(QPoint(0, 0)).y();
+    int bX = geometry().x();
+    int bY = geometry().y();
 
     // QPoint(155, 235-23)
-    int rX = 155;
-    int rY = 235-23;
+    int rX = buttonPlaceCoords.first;
+    int rY = buttonPlaceCoords.second;
 
-    int rangeEntry = 5;
+    int rangeEntry = 300;
+
+    qDebug() << "b: " << bX << " " << bY << "\tr: " << rX << " " << rY;
 
     if ((rX - rangeEntry <= bX) && (bX <= rX + rangeEntry) && (rY - rangeEntry <= bY) && (bY <= rY + rangeEntry)) {
         move(rX, rY);
@@ -65,4 +70,8 @@ void myMovableButton::checkPosition() {
 
         return;
     }
+}
+
+void myMovableButton::setButtonPlaceCoords(int x, int y) {
+    buttonPlaceCoords = {x, y};
 }

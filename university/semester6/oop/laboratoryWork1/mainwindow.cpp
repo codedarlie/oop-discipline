@@ -1,23 +1,141 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+// #include <format>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->stackedWidget->setCurrentIndex(0); // Начальное меню
 
-    mymovableButton = new myMovableButton(this);
-    mymovableButton->setText("Начать");
-    mymovableButton->resize(90, 25);
-    mymovableButton->move(100, 100);
-    // mymovableButton->setCursor(Qt::OpenHandCursor);
-    // mymovableButton->setEnabled(false);
-    mymovableButton->show();
+    // Настроки первой страницы
+    QWidget* firstPage = ui->stackedWidget->widget(0);
 
+    startButton = new myMovableButton(firstPage);
+    startButton->setText("Начать");
+    startButton->resize(90, 25);
+    startButton->move(100, 100);
+    startButton->setButtonPlaceCoords(ui->buttonPlace->x(), ui->buttonPlace->y());
+    startButton->show();
+
+    connect(startButton, &myMovableButton::switchToPage1, this, &MainWindow::switchToPage1);
+
+    // Настройки второй страницы
+    QStringList comboboxList = {"М", "Ж", "Не скажу"};
+    ui->genderComboBox->addItems(comboboxList);
+    ui->ageSpinBox->setMaximum(150);
+    ui->nameLineEdit->setMaxLength(25);
+    ui->labelHelper->setVisible(false);
+
+    // Настройки третьей страницы
+
+}
+
+void MainWindow::switchToPage1() {
+    ui->stackedWidget->setCurrentIndex(1);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::changeregistrationProgressBar(bool add, bool& empty) {
+    int value = ui->registrationProgressBar->value();
+    if (!add) {
+        if (value <= 1) ui->registrationProgressBar->setValue(0);
+        else ui->registrationProgressBar->setValue(value - 1);
+        empty = true;
+    } else if (empty) {
+        ui->registrationProgressBar->setValue(value + 1);
+        empty = false;
+    }
+
+    if (ui->registrationProgressBar->value() == ui->registrationProgressBar->maximum()) {
+        ui->toRegistratePushButton->setEnabled(true);
+    } else {
+        ui->toRegistratePushButton->setEnabled(false);
+    }
+}
+
+void MainWindow::changeLabelHelperString(const QString &label)
+{
+    ui->labelHelper->setText(label);
+}
+
+void MainWindow::on_nameLineEdit_textChanged(const QString &arg1)
+{
+    changeLabelHelperString(QString::number(arg1.size()) + " / 25");
+    changeregistrationProgressBar(arg1.size(), nameEmpty);
+
+    if (arg1.size() > 10) {
+        ui->labelHelper->setVisible(true);
+    } else {
+        ui->labelHelper->setVisible(false);
+    }
+}
+
+void MainWindow::on_ageSpinBox_valueChanged(int arg1)
+{
+    changeLabelHelperString(QString::number(arg1) + " / 150");
+    changeregistrationProgressBar(arg1, ageEmpty);
+
+    if (arg1 > 15) {
+        ui->labelHelper->setVisible(true);
+    } else {
+        ui->labelHelper->setVisible(false);
+    }
+}
+
+
+void MainWindow::on_genderComboBox_currentIndexChanged(int index)
+{
+    ui->labelHelper->setVisible(false);
+    if (index != -1) {
+        changeregistrationProgressBar(true, genderEmpty);
+    }
+}
+
+void MainWindow::on_toRegistratePushButton_pressed()
+{
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
+void MainWindow::on_dateHorizontalSlider_valueChanged(int value)
+{
+    QDate newDate = minDate.addDays(value);
+    ui->dateEdit->setDate(newDate);
+}
+
+void MainWindow::on_timeDial_valueChanged(int value)
+{
+    QTime newTime = minTime.addSecs(value);
+    ui->timeEdit->setTime(newTime);
+}
+
+void MainWindow::on_dateTimePagePushButton_pressed()
+{
+    if (ui->timeEdit->time().hour() == QTime::currentTime().hour() &&
+        ui->timeEdit->time().minute() == QTime::currentTime().minute() &&
+        ui->dateEdit->date() == QDate::currentDate()) {
+        ui->stackedWidget->setCurrentIndex(3);
+    } else {
+        QMessageBox::warning(this, "Результат", "Не получилось, попробуй еще раз!");
+
+        int randDate = rand() % ui->dateHorizontalSlider->maximum();
+        ui->dateHorizontalSlider->setValue(randDate);
+        on_dateHorizontalSlider_valueChanged(randDate);
+
+        int randTime = rand() % ui->timeDial->maximum();
+        ui->timeDial->setValue(randTime);
+        on_timeDial_valueChanged(randTime);
+    }
+}
+
+void MainWindow::on_pushButton_3_pressed()
+{
+    ui->stackedWidget->setCurrentIndex(ui->stackedWidget->currentIndex() + 1);
+}
+

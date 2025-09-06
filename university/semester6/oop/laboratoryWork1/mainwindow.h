@@ -2,9 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStackedWidget>
+#include <QDate>
+#include <QTime>
+#include <QMessageBox>
+
 #include "mymovablebutton.h"
-
-
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,7 +24,34 @@ public:
     ~MainWindow();
 
 private:
+    // Main
     Ui::MainWindow *ui;
-    myMovableButton *mymovableButton;
+
+    // First Page
+    myMovableButton *startButton;
+
+    // Second Page
+    // Progress Bar
+    bool nameEmpty = true;
+    bool ageEmpty = true;
+    bool genderEmpty = true;
+    void changeregistrationProgressBar(bool, bool&);
+    void changeLabelHelperString(const QString&);
+
+
+    // Third Page
+    QDate minDate = QDate(2025, 1, 1);
+    QTime minTime = QTime(0, 0);
+
+private slots:
+    void switchToPage1();
+    void on_nameLineEdit_textChanged(const QString &arg1);
+    void on_ageSpinBox_valueChanged(int arg1);
+    void on_genderComboBox_currentIndexChanged(int index);
+    void on_toRegistratePushButton_pressed();
+    void on_dateHorizontalSlider_valueChanged(int value);
+    void on_timeDial_valueChanged(int value);
+    void on_dateTimePagePushButton_pressed();
+    void on_pushButton_3_pressed();
 };
 #endif // MAINWINDOW_H

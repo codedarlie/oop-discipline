@@ -12,6 +12,7 @@ class myMovableButton : public QPushButton
 
 public:
     explicit myMovableButton(QWidget *parent = nullptr);
+    void setButtonPlaceCoords(int x, int y);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -24,6 +25,11 @@ private:
 
     bool dragging;
     QPoint dragPosition;
+
+    std::pair<int, int> buttonPlaceCoords;
+
+signals:
+    void switchToPage1();
 };
 
 #endif // MYMOVABLEBUTTON_H
