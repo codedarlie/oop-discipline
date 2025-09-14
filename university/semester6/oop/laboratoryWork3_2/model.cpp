@@ -1,9 +1,14 @@
 #include "model.h"
 
-model::model(QObject* parent): values{new QSettings("values", "app")} {
-    a = values->value("valueA", 0).toInt();
-    b = values->value("valueB", 50).toInt();
-    c = values->value("valueC", 100).toInt();
+model::model(QObject* parent):
+    values{new QSettings("values", "app")},
+    a {values->value("valueA", 0).toInt()},
+    b {values->value("valueB", 50).toInt()},
+    c {values->value("valueC", 100).toInt()}
+{
+    // a = values->value("valueA", 0).toInt();
+    // b = values->value("valueB", 50).toInt();
+    // c = values->value("valueC", 100).toInt();
 
     qDebug() << "model constructor.";
 }
@@ -16,6 +21,8 @@ model::~model()
 void model::changeData(abc sl, int value)
 {
     if (sl == abc::A) {
+        if (value == a) return; // минимизировал испускаемое уведомление
+
         if (value < 0) a = 0;
         else if (value > c) {
             a = c;
@@ -25,11 +32,15 @@ void model::changeData(abc sl, int value)
         if (b < a) b = a;
 
     } else if (sl == abc::B) {
+        if (value == b) return; // минимизировал испускаемое уведомление
+
         if (value < a) b = a;
         else if (value > c) b = c;
         else b = value;
 
     } else {
+        if (value == c) return; // минимизировал испускаемое уведомление
+
         if (value > 100) c = 100;
         else if (value < a) {
             c = a;
@@ -37,12 +48,13 @@ void model::changeData(abc sl, int value)
         } else c = value;
 
         if (b > c) b = c;
-
     }
 
     values->setValue("valueA", a);
     values->setValue("valueB", b);
     values->setValue("valueC", c);
+
+    qDebug() << "Values in model updated.";
 
     emit updateView(a, b, c);
 }

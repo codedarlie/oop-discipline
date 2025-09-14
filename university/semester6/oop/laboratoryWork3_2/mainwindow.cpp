@@ -1,6 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+/*
+    доделать:
+        уход фокуса из любого элемента управления курсором
+        ввод нечислового текста
+        стирание значения в элементе управления
+
+    сделано:
+        минимизировать уведомления
+*/
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -15,12 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lineEditC->setValidator(new QIntValidator(this));
 
     connect(this, &MainWindow::sendValueToController, c, &controller::receiveValue);
-
     connect(m, &model::updateView, this, &MainWindow::updateData);
-
     connect(this, &MainWindow::initializeSignal, c, &controller::initializeSlot);
-    emit initializeSignal();
 
+    emit initializeSignal();
 }
 
 MainWindow::~MainWindow()
@@ -120,8 +128,9 @@ void MainWindow::on_horizontalSliderC_valueChanged(int value)
 void MainWindow::updateData(int a, int b, int c)
 {
     if (updating) return;
-
     updating = true;
+
+    qDebug() << "Данные пришли и обновляются в view.";
 
     ui->lineEditA->setText(QString::number(a));
     ui->lineEditB->setText(QString::number(b));

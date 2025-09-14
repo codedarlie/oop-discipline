@@ -16,11 +16,11 @@ public:
     virtual ~model();
 
 private:
+    QSettings* values;
+
     int a;
     int b;
     int c;
-
-    QSettings* values;
 
 public slots:
     void changeData(abc, int);
