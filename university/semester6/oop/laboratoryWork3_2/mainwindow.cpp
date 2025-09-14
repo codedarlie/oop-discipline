@@ -1,26 +1,12 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <algorithm>
-#include <string>
-
-#include <QDebug>
-
-/*
-    переделать:
-        число должно проверяться только после полного ввода то есть не каждое изменение вызывается changeData
-        сохранять значения (txt)
-*/
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , m(new model())
-
-    // , c(new controller(m))
 {
     c = new controller(m);
-    // c->setModel(m);
 
     ui->setupUi(this);
 
@@ -35,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::initializeSignal, c, &controller::initializeSlot);
     emit initializeSignal();
 
-    qDebug() << "ok.";
 }
 
 MainWindow::~MainWindow()
@@ -45,90 +30,98 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// void MainWindow::lineEditTextChanged(abc sl, const QString &arg)
+void MainWindow::on_lineEditA_editingFinished()
+{
+    sendValueToController(abc::A, ui->lineEditA->text().toInt());
+}
+void MainWindow::on_lineEditB_editingFinished()
+{
+    sendValueToController(abc::B, ui->lineEditB->text().toInt());
+}
+void MainWindow::on_lineEditC_editingFinished()
+{
+    sendValueToController(abc::C, ui->lineEditC->text().toInt());
+}
+
+// void MainWindow::on_lineEditA_textChanged(const QString &arg1)
 // {
-    // проверить что строка является числом
-    // emit newValue(sl, arg.toInt());
-
-    // emit newValue(sl, arg);
+//     qDebug() << "le1: " << arg1;
+//     // lineEditTextChanged(abc::A, arg1);
+//     sendValueToController(abc::A, arg1.toInt());
 // }
 
-void MainWindow::on_lineEditA_textChanged(const QString &arg1)
-{
-    qDebug() << "le1: " << arg1;
-    // lineEditTextChanged(abc::A, arg1);
-    sendValueToController(abc::A, arg1.toInt());
-}
-
-void MainWindow::on_lineEditB_textChanged(const QString &arg1)
-{
-    qDebug() << "le2: " << arg1;
-    // lineEditTextChanged(abc::B, arg1);
-    sendValueToController(abc::B, arg1.toInt());
-}
-
-void MainWindow::on_lineEditC_textChanged(const QString &arg1)
-{
-    qDebug() << "le3: " << arg1;
-    // lineEditTextChanged(abc::C, arg1);
-    sendValueToController(abc::C, arg1.toInt());
-}
-
-// void MainWindow::spinBoxValueChanged(abc sl, int arg) {
-    // emit newValue(sl, arg);
+// void MainWindow::on_lineEditB_textChanged(const QString &arg1)
+// {
+//     qDebug() << "le2: " << arg1;
+//     // lineEditTextChanged(abc::B, arg1);
+//     sendValueToController(abc::B, arg1.toInt());
 // }
 
-void MainWindow::on_spinBoxA_valueChanged(int arg1)
+// void MainWindow::on_lineEditC_textChanged(const QString &arg1)
+// {
+//     qDebug() << "le3: " << arg1;
+//     // lineEditTextChanged(abc::C, arg1);
+//     sendValueToController(abc::C, arg1.toInt());
+// }
+
+void MainWindow::on_spinBoxA_editingFinished()
 {
-    qDebug() << "sb1: " << QString::number(arg1);
-    // spinBoxValueChanged(abc::A, arg1);
-    sendValueToController(abc::A, arg1);
+    sendValueToController(abc::A, ui->spinBoxA->value());
+}
+void MainWindow::on_spinBoxB_editingFinished()
+{
+    sendValueToController(abc::B, ui->spinBoxB->value());
+}
+void MainWindow::on_spinBoxC_editingFinished()
+{
+    sendValueToController(abc::C, ui->spinBoxC->value());
 }
 
-void MainWindow::on_spinBoxB_valueChanged(int arg1)
-{
-    qDebug() << "sb2: " << QString::number(arg1);
-    // spinBoxValueChanged(abc::B, arg1);
-    sendValueToController(abc::B, arg1);
-}
+// void MainWindow::on_spinBoxA_valueChanged(int arg1)
+// {
+//     qDebug() << "sb1: " << QString::number(arg1);
+//     // spinBoxValueChanged(abc::A, arg1);
+//     sendValueToController(abc::A, arg1);
+// }
 
-void MainWindow::on_spinBoxC_valueChanged(int arg1)
-{
-    qDebug() << "sb3: " << QString::number(arg1);
-    sendValueToController(abc::C, arg1);
-    // spinBoxValueChanged(abc::C, arg1);
-}
+// void MainWindow::on_spinBoxB_valueChanged(int arg1)
+// {
+//     qDebug() << "sb2: " << QString::number(arg1);
+//     // spinBoxValueChanged(abc::B, arg1);
+//     sendValueToController(abc::B, arg1);
+// }
+
+// void MainWindow::on_spinBoxC_valueChanged(int arg1)
+// {
+//     qDebug() << "sb3: " << QString::number(arg1);
+//     sendValueToController(abc::C, arg1);
+//     // spinBoxValueChanged(abc::C, arg1);
+// }
 
 // void MainWindow::horizontalSliderValueChanged(int value)
-// {
-// }
+// { }
 
 void MainWindow::on_horizontalSliderA_valueChanged(int value)
 {
-    qDebug() << "hs1: " << QString::number(value);
+    // qDebug() << "hs1: " << QString::number(value);
     sendValueToController(abc::A, value);
 }
-
 void MainWindow::on_horizontalSliderB_valueChanged(int value)
 {
-    qDebug() << "hs2: " << QString::number(value);
+    // qDebug() << "hs2: " << QString::number(value);
     sendValueToController(abc::B, value);
 }
-
 void MainWindow::on_horizontalSliderC_valueChanged(int value)
 {
-    qDebug() << "hs3: " << QString::number(value);
+    // qDebug() << "hs3: " << QString::number(value);
     sendValueToController(abc::C, value);
 }
 
 void MainWindow::updateData(int a, int b, int c)
 {
-
     if (updating) return;
 
     updating = true;
-
-    qDebug() << "updateData... " << QString::number(a) << "-" << QString::number(b) << "-" << QString::number(c);
 
     ui->lineEditA->setText(QString::number(a));
     ui->lineEditB->setText(QString::number(b));

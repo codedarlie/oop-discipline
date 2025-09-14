@@ -1,61 +1,49 @@
 #include "model.h"
 
-#include <QDebug>
+model::model(QObject* parent): values{new QSettings("values", "app")} {
+    a = values->value("valueA", 0).toInt();
+    b = values->value("valueB", 50).toInt();
+    c = values->value("valueC", 100).toInt();
 
-// model::model(MainWindow* v, QObject* parent): view{v}, a{0}, b{50}, c{100} {
-model::model(QObject* parent): a{0}, b{50}, c{100} {
-    // connect(this, &model::updateView, view, &MainWindow::updateData);
-    qDebug() << "model::model";
-    // emit updateView(a,b,c);
+    qDebug() << "model constructor.";
+}
+
+model::~model()
+{
+    delete values;
 }
 
 void model::changeData(abc sl, int value)
 {
-    qDebug() << "changeData: " << QString::number(value);
-
     if (sl == abc::A) {
-        if (value < 0) {
-            qDebug() << "a, v < 0";
-            a = 0;
-        }
+        if (value < 0) a = 0;
         else if (value > c) {
-            qDebug() << "a, v > c";
             a = c;
             if (b < a) b = a;
-        } else {
-            a = value;
-        }
+        } else a = value;
 
         if (b < a) b = a;
 
     } else if (sl == abc::B) {
-        if (value < a) {
-            qDebug() << "b, v < a";
-            b = a;
-        } else if (value > c) {
-            qDebug() << "b, v > c";
-            b = c;
-        } else {
-            qDebug() << "b, a < b < c";
-            b = value;
-        }
+        if (value < a) b = a;
+        else if (value > c) b = c;
+        else b = value;
+
     } else {
-        if (value > 100) {
-            qDebug() << "c, v > 100";
-            c = 100;
-        }
+        if (value > 100) c = 100;
         else if (value < a) {
-            qDebug() << "c, v < a";
             c = a;
             if (b > c) b = c;
-        } else {
-            c = value;
-        }
+        } else c = value;
 
         if (b > c) b = c;
+
     }
 
-    qDebug() << "go to updateView";
+    values->setValue("valueA", a);
+    values->setValue("valueB", b);
+    values->setValue("valueC", c);
+
     emit updateView(a, b, c);
 }
 

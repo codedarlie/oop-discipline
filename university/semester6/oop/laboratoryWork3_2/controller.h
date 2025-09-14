@@ -1,11 +1,11 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <QObject>
-
 #include "model.h"
-
 #include "abc.h"
+
+#include <QObject>
+#include <QDebug>
 
 class controller: public QObject
 {
