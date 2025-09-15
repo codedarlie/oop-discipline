@@ -24,6 +24,7 @@ public:
     int getY() const;
     bool getSelected() const;
     bool getHovered() const;
+    double getRadius() const;
 
     void setSelected(bool);
     void setHovered(bool);

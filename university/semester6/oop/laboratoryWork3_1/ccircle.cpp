@@ -70,6 +70,11 @@ bool CCircle::getHovered() const
     return hovered;
 }
 
+double CCircle::getRadius() const
+{
+    return radius;
+}
+
 CCircle::~CCircle()
 {
     qDebug() << "~CCircle";
