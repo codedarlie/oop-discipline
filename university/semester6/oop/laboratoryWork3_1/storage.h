@@ -33,7 +33,11 @@ public:
     }
 
     void remove(int index) {
-        l.remove(index);
+        if (index >= 0 && index < l.size()) {
+            CCircle* с = l.at(index);
+            delete с;
+            l.remove(index);
+        }
     }
 
     ~Storage() {

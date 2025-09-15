@@ -19,22 +19,23 @@ void PaintBox::paintEvent(QPaintEvent *event)
 {
     event;
 
-    // hide
     // не рисуем там где нельзя
+    // size();
 
     QPainter painter(this);
 
     painter.fillRect(rect(), Qt::white);
 
     for (int i = 0; i < storage.getSize(); ++i) {
-        storage.at(i)->draw(painter);
+        CCircle* c = storage.at(i);
+        c->draw(painter);
     }
 }
 
 void PaintBox::keyPressEvent(QKeyEvent *event)
 {
-    qDebug() << "PaintBox::keyPressEvent: ctrl";
     if (event->key() == Qt::Key_Control) {
+        qDebug() << "PaintBox::keyPressEvent: ctrl";
         ctrl = true;
     }
     if (event->key() == Qt::Key_Delete) {
@@ -50,10 +51,22 @@ void PaintBox::keyPressEvent(QKeyEvent *event)
 
 void PaintBox::resizeEvent(QResizeEvent *event)
 {
-    event;
-    // hide
+    // event;
+    QSize newSize = event->size();
+    int w = newSize.width();
+    int h = newSize.height();
+
+    for (int i = 0; i < storage.getSize(); ++i) {
+        CCircle* c = storage.at(i);
+        if ((c->getX() + c->getRadius() > w) || (c->getY() + c->getRadius() > h)) c->setHide(true);
+        else c->setHide(false);
+    }
 
     qDebug() << "PaintBox::resizeEvent";
+
+    QWidget::resizeEvent(event);
+
+    update();
 }
 
 void PaintBox::mousePressEvent(QMouseEvent *event)
@@ -108,6 +121,12 @@ void PaintBox::mousePressEvent(QMouseEvent *event)
 
         // Создание
         if (!hitButton) {
+            // todo: 20 как константу брать радиус откуда то
+            if ((x + 20 > size().width()) || (y + 20 > size().height()) || (x < 20) || (y < 20)) {
+                QMessageBox::warning(this, "Предупреждение!", "Нельзя создавать объекты на границах!");
+                return;
+            }
+
             for (int k = 0; k < stSize; ++k) {
                 storage.at(k)->setSelected(false);
             }
@@ -138,10 +157,9 @@ void PaintBox::mouseMoveEvent(QMouseEvent *event)
 }
 
 void PaintBox::keyReleaseEvent(QKeyEvent *event)
-{
-    qDebug() << "PaintBox::keyReleaseEvent: ctrl";
-
+{    
     if (event->key() == Qt::Key_Control) {
+        qDebug() << "PaintBox::keyReleaseEvent: ctrl";
         ctrl = false;
     }
 }

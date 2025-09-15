@@ -11,6 +11,9 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 
+
+#include <QMessageBox>
+
 class PaintBox: public QWidget
 {
     Q_OBJECT
