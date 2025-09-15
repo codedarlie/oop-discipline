@@ -60,11 +60,6 @@ int CCircle::getY() const
     return y;
 }
 
-double CCircle::getRadius() const
-{
-    return radius;
-}
-
 bool CCircle::getSelected() const
 {
     return selected;
@@ -74,8 +69,6 @@ bool CCircle::getHovered() const
 {
     return hovered;
 }
-
-
 
 CCircle::~CCircle()
 {

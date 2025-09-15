@@ -4,7 +4,6 @@
 #include <QList>
 
 #include <QDebug>
-#include <QPainter>
 
 #include "ccircle.h"
 
@@ -20,13 +19,9 @@ public:
         l.append(t);
     }
 
-    // void insert(int, T*);
-
     T* at(int index) {
         return l.at(index);
     }
-
-    // void set(int, T*);
 
     int getSize() const {
         return l.size();
@@ -34,8 +29,7 @@ public:
 
     void remove(int index) {
         if (index >= 0 && index < l.size()) {
-            CCircle* с = l.at(index);
-            delete с;
+            delete l.at(index);
             l.remove(index);
         }
     }

@@ -12,8 +12,7 @@ SOURCES += \
     ccircle.cpp \
     main.cpp \
     mainwindow.cpp \
-    paintbox.cpp \
-    storage.cpp
+    paintbox.cpp
 
 HEADERS += \
     ccircle.h \
