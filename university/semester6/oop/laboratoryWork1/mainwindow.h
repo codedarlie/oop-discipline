@@ -38,10 +38,13 @@ private:
     void changeregistrationProgressBar(bool, bool&);
     void changeLabelHelperString(const QString&);
 
+    QString name;
 
     // Third Page
     QDate minDate = QDate(2025, 1, 1);
     QTime minTime = QTime(0, 0);
+
+    void mousePressEvent(QMouseEvent* event);
 
 private slots:
     void switchToPage1();
@@ -53,5 +56,10 @@ private slots:
     void on_timeDial_valueChanged(int value);
     void on_dateTimePagePushButton_pressed();
     void on_pushButton_3_pressed();
+    void on_horizontalScrollBar_valueChanged(int value);
+    void on_radioButton_3_clicked();
+    void on_radioButton_clicked();
+    void on_radioButton_2_clicked();
+    void on_page3checkButton_clicked();
 };
 #endif // MAINWINDOW_H
