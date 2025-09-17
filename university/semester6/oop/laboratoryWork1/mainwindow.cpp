@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-// #include <format>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0); // Начальное меню
+
+    setFixedSize(400, 400);
 
     // Настроки первой страницы
     QWidget* firstPage = ui->stackedWidget->widget(0);
@@ -32,9 +33,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Настройки третьей страницы
 
     // Настройки четвертой страницы
-    // ui->decLcdNumber1->display(ui->horizontalScrollBar->value());
-
-    // int rand1 = rand() % 1024;
     ui->binLcdNumber->display(rand() % 1024);
 
     int start = 5000;
@@ -60,7 +58,18 @@ MainWindow::MainWindow(QWidget *parent)
         ui->radioButton_3->setText(QString::number(randNum));
     }
 
-    // ui->widget->mousePressEvent();
+    // Настройки пятой страницы
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::timeOut);
+
+    // Настройки шестой страницы
+    // sizes = std::array<std::pair<int, int>, 6> (
+        // {314, 634},
+        // {1000, 500},
+        // {300, 200},
+        // {754, 321},
+        // {1, 1},
+        // {1300, 650} );
 }
 
 void MainWindow::switchToPage1() {
@@ -69,6 +78,7 @@ void MainWindow::switchToPage1() {
 
 MainWindow::~MainWindow()
 {
+    delete timer;
     delete ui;
 }
 
@@ -105,15 +115,95 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         if ((r.x() <= mouse.x()) && (mouse.x() <= r.x() + r.width()) && (r.y() <= mouse.y()) && (mouse.y() <= r.y() + r.height())) {
             if (event->button() == Qt::RightButton) {
                 ui->stackedWidget->setCurrentIndex(5);
+                pageFiveRestart();
             } else {
                 QMessageBox::warning(this, "Уведомление", "Нажали не ту кнопку!");
             }
         } else {
             QMessageBox::warning(this, "Уведомление", "Нажали вне окна!");
         }
-        qDebug() << mouse.x() << " and " << mouse.y();
-        qDebug() << r.x() << " | " << r.width() << " and " << r.y() << " | " << r.height();
-        // if (event)
+        // qDebug() << mouse.x() << " and " << mouse.y();
+        // qDebug() << r.x() << " | " << r.width() << " and " << r.y() << " | " << r.height();
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (ui->stackedWidget->currentIndex() == 5) {
+        if (event->text() == "") return;
+        // qDebug() << "Key: " << event->text();
+        QString key = event->text();
+        QString pasteTextBrowser = ui->page5PasteTextBrowser->toPlainText() + key;
+        QString copyTextBrowser = ui->page5CopyTextBrowser->toPlainText();
+
+        ui->page5PasteTextBrowser->setText(pasteTextBrowser);
+
+        // qDebug() << "copyTextBrowser: " << copyTextBrowser << "\now pasteTextBrowser" << pasteTextBrowser;
+
+        if (copyTextBrowser.size() >= pasteTextBrowser.size()) {
+            if (copyTextBrowser[pasteTextBrowser.size() - 1] == key) {
+                if (copyTextBrowser == pasteTextBrowser) {
+                    timer->stop();
+                    ui->stackedWidget->setCurrentIndex(6);
+                    setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+                    setMinimumSize(1, 1);
+                }
+            } else {
+                QMessageBox::warning(this, "Уведомление" , "Нажали не ту кнопку!");
+                pageFiveRestart();
+                ui->page5PasteTextBrowser->setText("");
+            }
+        } else {
+            QMessageBox::warning(this, "Уведомление" , "Символов справа стало больше!!!");
+            pageFiveRestart();
+            ui->page5PasteTextBrowser->setText("");
+        }
+    }
+}
+
+void MainWindow::pageFiveRestart()
+{
+    qDebug() << "pageFiveRestart";
+    timeCounter = 59;
+    ui->page5Timer->setTime(QTime(0, 0, timeCounter));
+    generateRandomWord();
+    timer->setInterval(1000);
+    timer->start();
+}
+
+void MainWindow::generateRandomWord()
+{
+    qDebug() << "generateRandomWord";
+    ui->page5CopyTextBrowser->setText("");
+    for (int i = 0; i < 1; ++i) {
+        char r = 'a' + (rand() % 26);
+        QString s = ui->page5CopyTextBrowser->toPlainText() + r;
+        ui->page5CopyTextBrowser->setText(s);
+    }
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    if (ui->stackedWidget->currentIndex() == 6) {
+        int currentWidth = event->size().width();
+        int currentHeight = event->size().height();
+        ui->page6CurrentWIndowSize->setText("Текущий размер окна: " + QString::number(currentWidth) + "x" + QString::number(currentHeight));
+        qDebug() << currentWidth << " " << currentHeight;
+
+        // if ()
+    }
+}
+
+void MainWindow::timeOut()
+{
+    --timeCounter;
+    ui->page5Timer->setTime(QTime(0, 0, timeCounter));
+    if (!timeCounter) {
+        QMessageBox::warning(this, "Уведомление", "Время вышло, попробуй еще раз!");
+        pageFiveRestart();
+    } else {
+        timer->setInterval(1000);
+        timer->start();
     }
 }
 

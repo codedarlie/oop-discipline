@@ -5,6 +5,7 @@
 #include <QStackedWidget>
 #include <QDate>
 #include <QTime>
+#include <QTimer>
 #include <QMessageBox>
 
 #include "mymovablebutton.h"
@@ -46,6 +47,18 @@ private:
 
     void mousePressEvent(QMouseEvent* event);
 
+    void keyPressEvent(QKeyEvent* event);
+
+    // Fifth Page
+    QTimer *timer;
+    int timeCounter;
+    void pageFiveRestart();
+    void generateRandomWord();
+
+    // Sixth Page;
+    std::array<std::pair<int, int>, 6> sizes;
+    void resizeEvent(QResizeEvent* event);
+
 private slots:
     void switchToPage1();
     void on_nameLineEdit_textChanged(const QString &arg1);
@@ -61,5 +74,7 @@ private slots:
     void on_radioButton_clicked();
     void on_radioButton_2_clicked();
     void on_page3checkButton_clicked();
+
+    void timeOut();
 };
 #endif // MAINWINDOW_H
