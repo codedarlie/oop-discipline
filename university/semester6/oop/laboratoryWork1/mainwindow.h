@@ -38,7 +38,6 @@ private:
     bool genderEmpty = true;
     void changeregistrationProgressBar(bool, bool&);
     void changeLabelHelperString(const QString&);
-
     QString name;
 
     // Third Page
@@ -56,8 +55,22 @@ private:
     void generateRandomWord();
 
     // Sixth Page;
-    std::array<std::pair<int, int>, 6> sizes;
+    void page6Settings();
+    void setNextWindowSize();
+
+    std::array<std::pair<int, int>, 6> sizesChallenge = {{
+        {314, 634},
+        {1000, 500},
+        {300, 200},
+        {754, 321},
+        {1, 1},
+        {1300, 650}
+    }};
+    int curSizeIndex {-1};
     void resizeEvent(QResizeEvent* event);
+
+
+
 
 private slots:
     void switchToPage1();

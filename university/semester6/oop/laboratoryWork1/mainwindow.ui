@@ -61,7 +61,7 @@
        <enum>QFrame::Shadow::Sunken</enum>
       </property>
       <property name="currentIndex">
-       <number>5</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="page_0">
        <layout class="QGridLayout" name="gridLayout_3">
@@ -1617,7 +1617,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_18">
+         <widget class="QLabel" name="page6NextWindowSize">
           <property name="font">
            <font>
             <pointsize>30</pointsize>
@@ -1625,7 +1625,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </font>
           </property>
           <property name="text">
-           <string>1x1</string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignmentFlag::AlignCenter</set>
