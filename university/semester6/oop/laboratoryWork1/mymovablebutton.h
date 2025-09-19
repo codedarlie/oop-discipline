@@ -1,7 +1,6 @@
 #ifndef MYMOVABLEBUTTON_H
 #define MYMOVABLEBUTTON_H
 
-
 #include <QPushButton>
 #include <QMouseEvent>
 #include <QPoint>
@@ -9,10 +8,11 @@
 class myMovableButton : public QPushButton
 {
     Q_OBJECT
-
 public:
     explicit myMovableButton(QWidget *parent = nullptr);
     void setButtonPlaceCoords(int x, int y);
+
+    bool getTouched();
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -21,9 +21,10 @@ protected:
 
     void checkPosition();
 private:
-    bool fellIntoPlace;
-
     bool dragging;
+    bool fellIntoPlace;
+    bool touched;
+
     QPoint dragPosition;
 
     std::pair<int, int> buttonPlaceCoords;
