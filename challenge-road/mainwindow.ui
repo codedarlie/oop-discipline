@@ -672,14 +672,14 @@ background-color: rgba(255, 255, 255, 127);</string>
               </property>
               <property name="maximumDate">
                <date>
-                <year>2025</year>
+                <year>2026</year>
                 <month>12</month>
                 <day>31</day>
                </date>
               </property>
               <property name="minimumDate">
                <date>
-                <year>2025</year>
+                <year>2026</year>
                 <month>1</month>
                 <day>1</day>
                </date>

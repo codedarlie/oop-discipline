@@ -42,7 +42,7 @@ private:
     QString name;
 
     // Page 2
-    QDate minDate = QDate(2025, 1, 1);
+    QDate minDate = QDate(2026, 1, 1);
     QTime minTime = QTime(0, 0);
 
     // Page 3

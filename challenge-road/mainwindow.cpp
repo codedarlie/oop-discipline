@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -10,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Настройки страницы
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
-
 
     // SKIP BUTTON
     ui->skipButton->setVisible(true);
