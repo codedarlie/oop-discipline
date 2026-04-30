@@ -2,9 +2,7 @@
 #define STORAGE_H
 
 #include <QList>
-
 #include <QDebug>
-
 #include "ccircle.h"
 
 template <typename T>
