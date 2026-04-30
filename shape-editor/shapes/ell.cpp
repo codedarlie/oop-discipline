@@ -21,8 +21,6 @@ bool Ell::containsPoint(QPoint& p) const
 
 void Ell::draw(QPainter& painter) const
 {
-    // if (hide) return;
-
     setDrawSettings(painter);
     painter.drawEllipse(rect);
     if (selected) drawSelectedOutline(false, painter);

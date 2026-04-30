@@ -1,16 +1,5 @@
 #include "paintbox.h"
 
-/*
-    Баги:
-        когда объект перестает быть hide он не выделяется сразу
-        когда быстро создаю объекты они залагивают
-
-        пунктирная лииня не пропадает если resize не right bottom
-
-    Todo:
-        Менять мышку при изменении состояний
-*/
-
 PaintBox::PaintBox(QWidget *parent):
     QWidget(parent),
     storage(Storage<Shape>())

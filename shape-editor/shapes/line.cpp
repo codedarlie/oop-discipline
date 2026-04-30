@@ -21,13 +21,6 @@ void Line::draw(QPainter &painter) const
 bool Line::containsPoint(QPoint& p) const
 {
     return rect.contains(p);
-
-    // QPoint p1 = rect.topLeft();
-    // QPoint p2 = rect.bottomRight();
-
-    // double distance = pointToLineDistance(p, p1, p2);
-
-    // return distance <= 10.0;
 }
 
 Line::~Line()

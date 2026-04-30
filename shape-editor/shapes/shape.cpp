@@ -1,7 +1,5 @@
 #include "shape.h"
 
-//  bug не сразу перевыбирает handler
-
 Shape::Shape(QPoint p, QSize s, QColor c):
     rect (p, s),
     color (c)
@@ -65,7 +63,6 @@ void Shape::move(QPoint offset, QSize& bounds)
 
 void Shape::resize(QPoint offset, QSize& bounds)
 {
-    // если стал слишком маленький размер то не делать и предупреждать
     int x = rect.x();
     int y = rect.y();
 
