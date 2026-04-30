@@ -57,11 +57,11 @@ public:
         return data[i][j];
     }
     size_t getRowsSize() const {
-        std::cout << "Matrix::getRowsSize()";
+        std::cout << "Matrix::getRowsSize() ";
         return rows;
     }
     size_t getColumnsSize() const {
-        std::cout << "Matrix::getColumnsSize()";
+        std::cout << "Matrix::getColumnsSize() ";
         return columns;
     }
     const std::vector<std::vector<int>>& getData() const {
